@@ -38,59 +38,16 @@ class _MovieListWidgetState extends State<MovieListWidget> {
           children: widget.model.map((e) {
             return Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-              child: FittedBox(
+              child: Image.network(
+                e.poster,
                 fit: BoxFit.fill,
-                child: Image.network(
-                  e.poster,
-                  errorBuilder: (a, b, c) {
-                    return Text(b.toString());
-                  },
-                ),
+                errorBuilder: (_, __, ___) {
+                  return Icon(Icons.broken_image);
+                },
               ),
             );
           }).toList(),
         )),
-
-        // GridView(
-        //   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        //       crossAxisSpacing: 8, maxCrossAxisExtent: double.maxFinite),
-        //   children: widget.model
-        //       .map(
-        //         (e) => ConstrainedBox(
-        //             constraints: BoxConstraints(
-        //                 maxHeight: double.infinity, maxWidth: double.infinity),
-        //             child: ListView(
-        //               children: [
-        //                 Image.network(e.poster, errorBuilder: (a, b, c) {
-        //                   return Center(child: Text(b.toString()));
-        //                 }),
-        //                 Text(e.year)
-        //               ],
-        //             )),
-        //       )
-        //       .toList(),
-        // )
-
-        // GridView.count(
-        //   crossAxisCount: 2,
-        //   children: widget.model
-        //       .map(
-        //         (e) => Column(
-        //             // padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
-        //             children: [
-        //               FittedBox(
-        //                 fit: BoxFit.fill,
-        //                 child:
-        //                     Image.network(e.poster, errorBuilder: (a, b, c) {
-        //                   return Center(child: Text(b.toString()));
-        //                 }),
-        //               ),
-        //               Text(e.title),
-        //               Text(e.year)
-        //             ]),
-        //       )
-        //       .toList(),
-        // ),
       ],
     );
   }
