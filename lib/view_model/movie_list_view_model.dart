@@ -13,9 +13,15 @@ class MovieListViewModel {
     movieList = [];
   }
 
-  Future<void> fetchMovies() async {
+  Future<void> fetchMovies(String? searchString) async {
     Logger.log("fetching movies...");
-    dynamic response = await get(Uri.parse(Constants.APIUrl));
+    Uri uri = Uri.parse(Constants.getAPIURL());
+
+    if (searchString?.isNotEmpty ?? false) {
+      uri = Uri.parse(Constants.getAPIURL(searchTerm: searchString ?? ""));
+    }
+    Logger.log("url ${uri.toString()}");
+    dynamic response = await get(uri);
     Map dictionary = jsonDecode(response.body);
     movieList = MovieModel.fromJson(dictionary);
     isLoading = false;

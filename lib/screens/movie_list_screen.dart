@@ -1,21 +1,23 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/rendering/sliver.dart';
-import 'package:flutter/src/rendering/sliver_grid.dart';
 import 'package:movie_list/models/search_model.dart';
-import 'package:movie_list/view_model/movie_list_view_model.dart';
+
+import '../view_model/movie_list_view_model.dart';
 
 class MovieListWidget extends StatefulWidget {
-  MovieListWidget({Key? key, required this.model}) : super(key: key);
+  MovieListWidget({Key? key, required this.model, required this.viewModel})
+      : super(key: key);
   late List<MovieModel> model;
+  MovieListViewModel viewModel;
 
   @override
   State<MovieListWidget> createState() => _MovieListWidgetState();
 }
 
 class _MovieListWidgetState extends State<MovieListWidget> {
-  //model.map((e) => Text(e.title)).toList(),
+  void getMovies(String? searchString) async {
+    await widget.viewModel.fetchMovies(searchString);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,7 +27,10 @@ class _MovieListWidgetState extends State<MovieListWidget> {
           child: TextFormField(
             decoration: InputDecoration(hintText: "Enter movie name"),
             onChanged: (value) {
-              print(value);
+              getMovies(value);
+              setState(() {
+                widget.model = widget.viewModel.movieList;
+              });
             },
           ),
         ),
@@ -50,19 +55,5 @@ class _MovieListWidgetState extends State<MovieListWidget> {
         )),
       ],
     );
-  }
-}
-
-class Delegate extends SliverGridDelegate {
-  @override
-  SliverGridLayout getLayout(SliverConstraints constraints) {
-    // TODO: implement getLayout
-    throw UnimplementedError();
-  }
-
-  @override
-  bool shouldRelayout(covariant SliverGridDelegate oldDelegate) {
-    // TODO: implement shouldRelayout
-    throw UnimplementedError();
   }
 }

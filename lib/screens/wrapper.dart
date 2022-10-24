@@ -19,7 +19,7 @@ class _WrapperWidgetState extends State<WrapperWidget> {
   }
 
   Future<void> _getMoviesList() async {
-    await viewModel.fetchMovies();
+    await viewModel.fetchMovies(null);
 
     setState(() {
       model = viewModel.movieList;
@@ -33,6 +33,7 @@ class _WrapperWidgetState extends State<WrapperWidget> {
             ? CircularProgressIndicator()
             : MovieListWidget(
                 model: model,
+                viewModel: viewModel,
               ));
   }
 }
