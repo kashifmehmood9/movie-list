@@ -10,7 +10,6 @@ class WrapperWidget extends StatefulWidget {
 
 class _WrapperWidgetState extends State<WrapperWidget> {
   MovieListViewModel viewModel = MovieListViewModel();
-  late List<MovieModel> model;
   @override
   void initState() {
     // TODO: implement initState
@@ -21,9 +20,7 @@ class _WrapperWidgetState extends State<WrapperWidget> {
   Future<void> _getMoviesList() async {
     await viewModel.fetchMovies(null);
 
-    setState(() {
-      model = viewModel.movieList;
-    });
+    setState(() {});
   }
 
   @override
@@ -32,7 +29,6 @@ class _WrapperWidgetState extends State<WrapperWidget> {
         child: viewModel.isLoading
             ? CircularProgressIndicator()
             : MovieListWidget(
-                model: model,
                 viewModel: viewModel,
               ));
   }

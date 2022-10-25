@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:movie_list/Constants.dart';
 import 'package:movie_list/helper/logger.dart';
 import 'package:movie_list/models/search_model.dart';
@@ -21,9 +22,15 @@ class MovieListViewModel {
       uri = Uri.parse(Constants.getAPIURL(searchTerm: searchString ?? ""));
     }
     Logger.log("url ${uri.toString()}");
-    dynamic response = await get(uri);
-    Map dictionary = jsonDecode(response.body);
-    movieList = MovieModel.fromJson(dictionary);
+
+    try {
+      dynamic response = await get(uri);
+      var dictionary = jsonDecode(response.body);
+      movieList = MovieModel.fromJson(dictionary);
+    } catch (e) {
+      movieList = [];
+      Logger.log("Exception ${e.toString()}");
+    }
     isLoading = false;
   }
 }
