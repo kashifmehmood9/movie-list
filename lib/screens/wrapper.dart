@@ -14,13 +14,14 @@ class _WrapperWidgetState extends State<WrapperWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    viewModel.addListener(() {
+      setState(() {});
+    });
     _getMoviesList();
   }
 
   Future<void> _getMoviesList() async {
     await viewModel.fetchMovies(null);
-
-    setState(() {});
   }
 
   @override
