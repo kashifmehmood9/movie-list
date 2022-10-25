@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Constants {
   static final _urlKey = "https://www.omdbapi.com/?s=";
   static final _pageKey = "&page=";
