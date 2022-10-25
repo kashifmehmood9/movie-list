@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:movie_list/screens/movie_list_screen.dart';
-import 'package:movie_list/models/search_model.dart';
 import 'package:movie_list/view_model/movie_list_view_model.dart';
 
 class WrapperWidget extends StatefulWidget {
@@ -21,7 +20,7 @@ class _WrapperWidgetState extends State<WrapperWidget> {
   }
 
   Future<void> _getMoviesList() async {
-    await viewModel.fetchMovies(null);
+    await viewModel.fetchMovies(null, 0);
   }
 
   @override

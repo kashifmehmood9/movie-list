@@ -11,8 +11,21 @@ class MovieListWidget extends StatefulWidget {
 }
 
 class _MovieListWidgetState extends State<MovieListWidget> {
-  void getMovies(String? searchString) async {
-    await widget.viewModel.fetchMovies(searchString);
+  late ScrollController controller;
+  String? searchString;
+  @override
+  void initState() {
+    super.initState();
+    controller = ScrollController();
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.offset) {
+        getMovies(searchString, 1);
+      }
+    });
+  }
+
+  void getMovies(String? searchString, int page) async {
+    await widget.viewModel.fetchMovies(searchString, page);
     setState(() {});
   }
 
@@ -24,15 +37,18 @@ class _MovieListWidgetState extends State<MovieListWidget> {
         child: TextFormField(
           decoration: InputDecoration(hintText: "Enter movie name"),
           onChanged: (value) {
-            getMovies(value);
+            widget.viewModel.reset();
+            searchString = value;
+            getMovies(value, 0);
           },
         ),
       ),
       SizedBox(
         height: 10,
       ),
-      Flexible(
+      Expanded(
           child: GridView.builder(
+              controller: controller,
               itemCount: widget.viewModel.movieList.length,
               gridDelegate:
                   SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
