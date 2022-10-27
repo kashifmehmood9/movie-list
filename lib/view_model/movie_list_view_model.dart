@@ -5,6 +5,7 @@ import 'package:movie_list/Constants.dart';
 import 'package:movie_list/helper/logger.dart';
 import 'package:movie_list/models/search_model.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 
 class MovieListViewModel extends ChangeNotifier {
   late List<MovieModel> movieList;
@@ -14,7 +15,7 @@ class MovieListViewModel extends ChangeNotifier {
     movieList = [];
   }
 
-  Future<void> fetchMovies(String? searchString, int page) async {
+  Future<List<MovieModel>> fetchMovies(String? searchString, int page) async {
     Logger.log("fetching movies...");
     print("This.page ${this.page} + Page: ${page}");
 
@@ -37,12 +38,21 @@ class MovieListViewModel extends ChangeNotifier {
       var dictionary = jsonDecode(response.body);
       var list = MovieModel.fromJson(dictionary);
       movieList.addAll(list);
+
+      return movieList;
     } catch (e) {
       Logger.log("Exception ${e.toString()}");
     }
     isLoading = false;
-    notifyListeners();
+
+    return [];
+    // notifyListeners();
   }
+  //
+  // Future<Stream<List<MovieModel>>> getMovieslist(
+  //     String? search, int page) async {
+  //   return await fetchMovies(null, 0);
+  // }
 
   void reset() {
     page = 1;

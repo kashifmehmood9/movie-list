@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movie_list/screens/movie_list_screen.dart';
 import 'package:movie_list/view_model/movie_list_view_model.dart';
+import 'package:provider/provider.dart';
+
+import '../models/search_model.dart';
 
 class WrapperWidget extends StatefulWidget {
   @override
@@ -25,11 +28,22 @@ class _WrapperWidgetState extends State<WrapperWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: viewModel.isLoading
-            ? CircularProgressIndicator()
-            : MovieListWidget(
-                viewModel: viewModel,
-              ));
+    return FutureBuilder<List<MovieModel>>(
+      future: Provider.of<MovieListViewModel>(context).fetchMovies("", 1),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return MovieListWidget(modelList: snapshot.data!);
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
   }
 }
+
+// return Container(
+// child: viewModel.isLoading
+// ? CircularProgressIndicator()
+//     : MovieListWidget(
+// viewModel: viewModel,
+// ));
