@@ -27,6 +27,8 @@ class _MovieListWidgetState extends State<MovieListWidget> {
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
         getMovies(searchString, 1);
+        controller.animateTo(controller.offset + 50,
+            duration: Duration(seconds: 1), curve: Curves.ease);
       }
     });
   }
@@ -56,32 +58,34 @@ class _MovieListWidgetState extends State<MovieListWidget> {
         height: 10,
       ),
       Expanded(
-          child: GridView.builder(
-              controller: controller,
-              itemCount: widget.modelList.length,
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MovieListDetailsWidget(
-                                movie: widget.modelList[index])));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.network(
-                      widget.modelList[index].poster,
-                      fit: BoxFit.fill,
-                      errorBuilder: (_, __, ___) {
-                        return Icon(Icons.broken_image);
-                      },
-                    ),
+          child: Scrollbar(
+        child: GridView.builder(
+            controller: controller,
+            itemCount: widget.modelList.length,
+            gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MovieListDetailsWidget(
+                              movie: widget.modelList[index])));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.network(
+                    widget.modelList[index].poster,
+                    fit: BoxFit.fill,
+                    errorBuilder: (_, __, ___) {
+                      return Icon(Icons.broken_image);
+                    },
                   ),
-                );
-              }))
+                ),
+              );
+            }),
+      ))
     ]);
   }
 }
